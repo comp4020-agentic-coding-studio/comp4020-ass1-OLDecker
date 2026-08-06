@@ -98,6 +98,12 @@ const KEY_DIRECTIONS: Record<string, Direction> = {
 };
 
 window.addEventListener("keydown", (event) => {
+  if (event.key === "Backspace") {
+    event.preventDefault();
+    undo();
+    return;
+  }
+
   const dir = KEY_DIRECTIONS[event.key.toLowerCase()];
   if (!dir) return;
   event.preventDefault();
