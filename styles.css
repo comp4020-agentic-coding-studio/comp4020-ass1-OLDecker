@@ -14,3 +14,163 @@ main {
 a {
   color: #0b5fff;
 }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.swatch-h {
+  background: #d9730d;
+}
+
+.swatch-p {
+  background: #2a6fdb;
+}
+
+.fold-panel {
+  margin: 1.5rem 0;
+}
+
+.fold-board {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: auto;
+  margin: 0 auto;
+  background: #f4f6fa;
+  border-radius: 0.5rem;
+}
+
+.fold-board .fold-backbone {
+  stroke: #9aa5b1;
+  stroke-width: 3;
+}
+
+.fold-board .residue {
+  stroke: #1a1a1a;
+  stroke-width: 1;
+}
+
+.fold-board .residue-h {
+  fill: #d9730d;
+}
+
+.fold-board .residue-p {
+  fill: #2a6fdb;
+}
+
+.readout {
+  text-align: center;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.controls-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.controls button,
+.secondary-controls button,
+.reveal-panel button {
+  min-width: 3rem;
+  min-height: 3rem;
+  font-size: 1.25rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.secondary-controls button,
+.reveal-panel button {
+  min-width: auto;
+  min-height: auto;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.controls button:disabled,
+.secondary-controls button:disabled,
+.reveal-panel button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.key-hint {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.secondary-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.hint {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.reveal-panel {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.comparison {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.comparison .fold-panel {
+  flex: 1 1 16rem;
+  max-width: 20rem;
+}
+
+.comparison-note {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+@media (width <= 480px) {
+  body {
+    padding: 1rem;
+  }
+
+  .fold-board {
+    max-width: 100%;
+  }
+}

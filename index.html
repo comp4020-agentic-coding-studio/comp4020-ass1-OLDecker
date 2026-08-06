@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COMP4020 prototype</title>
+    <title>Why proteins fold the way they do</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,11 +13,90 @@
       </nav>
     </header>
     <main>
-      <h1>COMP4020 prototype</h1>
-      <p data-testid="intro">
-        Replace this with your prototype. This week's brief is on the course website;
-        <code>spec/README.md</code> explains how the checks in this repo relate to it.
+      <h1>Why proteins fold the way they do</h1>
+      <p>
+        A protein is a chain of amino acids, and it always folds into the
+        <em>same</em> shape. It's tempting to picture the chain "finding" its
+        bonds like a key finding a lock — but the real driver is simpler and
+        stranger: <strong>water</strong>. Some amino acids are hydrophobic
+        (they disrupt water's structure), so water pushes them together into
+        a buried core, away from itself, to stay as disordered as possible.
+        The fold isn't chosen by the protein. It's forced by water's entropy.
       </p>
+
+      <p>
+        Fold the simplified chain below yourself, one step at a time, and
+        watch the score change as hydrophobic residues get buried or left
+        exposed.
+      </p>
+
+      <ul class="legend" aria-label="Legend">
+        <li><span class="swatch swatch-h" aria-hidden="true"></span> Hydrophobic (H) — avoids water</li>
+        <li><span class="swatch swatch-p" aria-hidden="true"></span> Polar (P) — fine with water</li>
+      </ul>
+
+      <section class="fold-panel" aria-label="Your fold">
+        <h2>Your fold</h2>
+        <svg
+          class="fold-board"
+          data-testid="fold-board"
+          viewBox="0 0 40 40"
+          role="img"
+          aria-label="The chain folded so far"
+        ></svg>
+        <p class="readout" aria-live="polite">
+          Energy:
+          <span data-testid="energy-readout">0</span>
+          <span data-testid="progress-readout">(residue 1 of 14 placed)</span>
+        </p>
+
+        <div class="controls" role="group" aria-label="Place the next residue">
+          <button type="button" data-testid="dir-up" data-dir="up" aria-label="Place up (W)">
+            ↑<span class="key-hint">W</span>
+          </button>
+          <div class="controls-row">
+            <button type="button" data-testid="dir-left" data-dir="left" aria-label="Place left (A)">
+              ←<span class="key-hint">A</span>
+            </button>
+            <button type="button" data-testid="dir-down" data-dir="down" aria-label="Place down (S)">
+              ↓<span class="key-hint">S</span>
+            </button>
+            <button type="button" data-testid="dir-right" data-dir="right" aria-label="Place right (D)">
+              →<span class="key-hint">D</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="secondary-controls">
+          <button type="button" data-testid="undo">Undo</button>
+          <button type="button" data-testid="reset">Reset</button>
+        </div>
+
+        <p class="hint">Use the arrow keys or WASD, or click the buttons above.</p>
+      </section>
+
+      <section class="reveal-panel">
+        <button type="button" data-testid="reveal-optimal" disabled>
+          Reveal the optimal fold
+        </button>
+
+        <div class="comparison" data-testid="comparison" hidden>
+          <div class="fold-panel" aria-label="Your fold, for comparison">
+            <h2>Your fold</h2>
+            <svg class="fold-board" data-testid="your-fold-board" viewBox="0 0 40 40" role="img" aria-label="Your finished fold"></svg>
+            <p data-testid="your-energy">Energy: 0</p>
+          </div>
+          <div class="fold-panel" aria-label="Optimal fold">
+            <h2>Optimal fold</h2>
+            <svg class="fold-board" data-testid="optimal-fold-board" viewBox="0 0 40 40" role="img" aria-label="The true minimum-energy fold"></svg>
+            <p data-testid="optimal-energy">Energy: 0</p>
+          </div>
+        </div>
+
+        <p class="comparison-note" data-testid="comparison-note" hidden>
+          Water didn't need you to get it right — it always finds this shape.
+        </p>
+      </section>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>
