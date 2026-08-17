@@ -7,12 +7,18 @@ export type Residue = "H" | "P";
 export type Coord = { x: number; y: number };
 export type Direction = "up" | "down" | "left" | "right";
 
-// A pedagogical sequence, not a real protein: long enough that the fold isn't
-// obvious by eye, short enough that a visitor can place every residue by hand
-// and that the optimal-fold search (optimal-fold.ts) finishes instantly.
-export const SEQUENCE: Residue[] = [
-  "H", "P", "P", "H", "H", "P", "P", "H", "H", "P", "P", "H", "P", "H",
-];
+// Chain length is visitor-adjustable via a slider. The ceiling is a real
+// constraint, not an arbitrary one: the optimal-fold search (optimal-fold.ts)
+// is exhaustive, and benchmarking it against random sequences showed it
+// staying under ~100ms through length 26 before blowing up sharply beyond
+// that — 22 keeps a comfortable margin for slower devices.
+export const MIN_LENGTH = 8;
+export const MAX_LENGTH = 22;
+export const DEFAULT_LENGTH = 14;
+
+export function generateRandomSequence(length: number): Residue[] {
+  return Array.from({ length }, () => (Math.random() < 0.5 ? "H" : "P"));
+}
 
 export const DIRECTIONS: Direction[] = ["up", "down", "left", "right"];
 
