@@ -160,3 +160,20 @@ catching you out, a fact about the stack the agent keeps getting wrong --- write
 it down here. Growing this file is the work of harness engineering, and the gap
 between this boilerplate and your own version is part of what your prototype
 says about the developer you're becoming.
+
+## Project-specific notes (HP protein-folding explainer)
+
+- **This repo's `stylelint` config wants modern color syntax.** Write
+  `rgb(r g b / a%)`, not legacy `rgba(r, g, b, a)` --- the legacy form trips
+  `color-function-alias-notation`/`color-function-notation`/
+  `alpha-value-notation` all at once. Fix the syntax, don't disable the rule.
+- **`[hidden]` loses to any author rule with `display` on the same selector,
+  regardless of specificity.** `.comparison { display: flex; }` alone made the
+  "reveal optimal fold" comparison panels visible on page load even though
+  they had the `hidden` attribute --- the UA stylesheet's `[hidden] { display:
+  none }` is beaten by an author-normal rule on a tie. No spec test in this
+  repo checks element *visibility*, only existence, so this kind of bug is
+  invisible to `pnpm check` --- it only shows up if you actually look at the
+  rendered page. When adding a `hidden`-toggled element, either add an
+  explicit `selector[hidden] { display: none; }` override, or open the page
+  (or screenshot it) and check it actually starts hidden.

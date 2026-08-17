@@ -1,74 +1,62 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
 A reading-guide to how the work came together --- a map to your process, not an
 essay about it. Markers read this file and follow its citations; they don't
 trawl the repo for evidence you didn't point at, so if a moment mattered, cite
 it.
 
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and each brief adds its own word count and moment count.
-
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+An explainer of why proteins fold the way they do, built around a small
+playable HP-model: a chain of Hydrophobic/Polar residues that the visitor
+folds themselves, one step at a time on a grid, watching an energy score
+change as hydrophobic residues get buried or left exposed. A "reveal the
+optimal fold" button runs an exhaustive search for the true minimum-energy
+fold and shows it side by side with the visitor's own attempt, so the point
+of the whole page --- that water forces the fold, the protein doesn't choose
+it --- has something concrete to click against.
 
 ## The moments that mattered
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
+1. **A half-finished feature had left the build broken.** `hp-model.ts` had
+   already been rewritten to generate a random sequence at a chosen length
+   instead of a fixed one, but `main.ts` still imported the removed export in
+   six places, so `pnpm check` failed at typecheck before it even reached the
+   build. Rather than revert the model change, I read `hp-model.ts`'s own
+   comments (the length ceiling is picked from benchmarking how long the
+   exhaustive optimal-fold search stays fast) and finished the feature it was
+   clearly building towards: wired a range input in `index.html` to
+   regenerate the sequence and reset the board on change. I knew it was right
+   when `pnpm check` went from a typecheck failure to fully green --- 26
+   passing tests, clean build, clean lint
+   ([`74f35e0`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-OLDecker/commit/74f35e0)).
 
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
+2. **A cascade bug that no test caught, because it's a visibility bug.** The
+   "your fold vs. optimal fold" comparison panels have a `hidden` attribute in
+   the markup, but they were rendering on page load anyway. `pnpm check` was
+   green the whole time --- the interaction spec only asserts the elements
+   exist, not what they look like. I only found this by actually opening the
+   rendered page and taking a full-page screenshot, which is the harness's own
+   standing instruction ("the rendered page is the truth; your mental model of
+   it isn't"). The cause was `.comparison { display: flex; }` beating the UA
+   `[hidden]` default on a specificity tie. I added the explicit override and
+   confirmed it with a second screenshot showing the panels correctly hidden
+   until "Reveal the optimal fold" is clicked. Since no automated check in
+   this repo would have caught a regression here, I wrote the failure mode
+   into `CLAUDE.md` as a rule for any future `hidden`-toggled element, instead
+   of just fixing this one instance
+   ([`b199bff`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-OLDecker/commit/b199bff)).
 
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. The strongest moments are the ones where a correction
-landed in the **harness** rather than in another prompt --- a rule added to
-`CLAUDE.md`, a check wired up, an attempt thrown away: re-prompting until it
-passes is the routine case, and changing what the agent works against is the
-skilled one.
-
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
-
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
-
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
+3. **Splitting one working tree into commits that each stand on their own.**
+   A background-image feature, the chain-length slider, and the visibility
+   bugfix above had all landed in the same uncommitted working tree, touching
+   overlapping files (`styles.css`, `index.html`). Instead of one combined
+   commit, I used `git add -p` to stage exactly the hunks belonging to each
+   concern, and `git stash push --keep-index` to run `pnpm check` against
+   each staged subset in isolation before committing it --- so each commit is
+   independently buildable and independently correct, not just correct in
+   combination
+   ([`7a9ca45...b199bff`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-OLDecker/compare/7a9ca45...b199bff)).
 
 ## Before you ship
 
@@ -78,6 +66,3 @@ there --- before a marker ever opens the file. It checks that your map is
 traceable, not that it is good: the marker judges whether your small,
 deliberately chosen set of moments shows real judgement and reflection. A green
 check is not a substitute for that curation.
-
-Images are deliberately not checked, because whether one renders is visible the
-moment you look. Open this file on GitHub and look at it before you ship.
