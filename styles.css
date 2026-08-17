@@ -186,6 +186,10 @@ header nav a:hover {
   text-align: center;
 }
 
+.comparison[hidden] {
+  display: none;
+}
+
 .comparison {
   display: flex;
   flex-wrap: wrap;
