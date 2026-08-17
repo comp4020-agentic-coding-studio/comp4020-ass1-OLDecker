@@ -36,6 +36,21 @@
         <li><span class="swatch swatch-p" aria-hidden="true"></span> Polar (P) — fine with water</li>
       </ul>
 
+      <div class="length-control">
+        <label for="length-slider">
+          Chain length: <span data-testid="length-readout">14</span> residues
+        </label>
+        <input
+          type="range"
+          id="length-slider"
+          data-testid="length-slider"
+          min="8"
+          max="22"
+          value="14"
+        />
+        <p class="hint">Dragging picks a fresh random chain of that length.</p>
+      </div>
+
       <section class="fold-panel" aria-label="Your fold">
         <h2>Your fold</h2>
         <svg

@@ -71,6 +71,19 @@ header nav a:hover {
   background: #2a6fdb;
 }
 
+.length-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.length-control input[type="range"] {
+  width: 100%;
+  max-width: 20rem;
+}
+
 .fold-panel {
   margin: 1.5rem 0;
 }

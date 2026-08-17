@@ -1,4 +1,16 @@
-import { SEQUENCE, DIRECTIONS, canPlace, applyDirection, computeEnergy, type Coord, type Direction } from "./hp-model";
+import {
+  MIN_LENGTH,
+  MAX_LENGTH,
+  DEFAULT_LENGTH,
+  generateRandomSequence,
+  DIRECTIONS,
+  canPlace,
+  applyDirection,
+  computeEnergy,
+  type Coord,
+  type Direction,
+  type Residue,
+} from "./hp-model";
 import { findOptimalFold } from "./optimal-fold";
 import { renderFold } from "./render";
 
@@ -14,6 +26,8 @@ const yourFoldBoard = document.querySelector<SVGSVGElement>('[data-testid="your-
 const yourEnergy = document.querySelector<HTMLElement>('[data-testid="your-energy"]');
 const optimalFoldBoard = document.querySelector<SVGSVGElement>('[data-testid="optimal-fold-board"]');
 const optimalEnergy = document.querySelector<HTMLElement>('[data-testid="optimal-energy"]');
+const lengthSlider = document.querySelector<HTMLInputElement>('[data-testid="length-slider"]');
+const lengthReadout = document.querySelector<HTMLElement>('[data-testid="length-readout"]');
 
 const directionButtons = new Map<Direction, HTMLButtonElement>();
 for (const dir of DIRECTIONS) {
@@ -21,18 +35,19 @@ for (const dir of DIRECTIONS) {
   if (button) directionButtons.set(dir, button);
 }
 
+let sequence: Residue[] = generateRandomSequence(DEFAULT_LENGTH);
 let path: Coord[] = [{ x: 0, y: 0 }];
 
 function isComplete(): boolean {
-  return path.length === SEQUENCE.length;
+  return path.length === sequence.length;
 }
 
 function render(): void {
-  if (board) renderFold(board, path, SEQUENCE);
+  if (board) renderFold(board, path, sequence);
 
-  if (energyReadout) energyReadout.textContent = String(computeEnergy(path, SEQUENCE));
+  if (energyReadout) energyReadout.textContent = String(computeEnergy(path, sequence));
   if (progressReadout) {
-    progressReadout.textContent = `(residue ${path.length} of ${SEQUENCE.length} placed)`;
+    progressReadout.textContent = `(residue ${path.length} of ${sequence.length} placed)`;
   }
 
   for (const [dir, button] of directionButtons) {
@@ -66,13 +81,20 @@ function hideComparison(): void {
   if (comparisonNote) comparisonNote.hidden = true;
 }
 
+function regenerate(length: number): void {
+  sequence = generateRandomSequence(length);
+  path = [{ x: 0, y: 0 }];
+  hideComparison();
+  render();
+}
+
 function revealOptimal(): void {
   if (!isComplete()) return;
-  const optimal = findOptimalFold(SEQUENCE);
+  const optimal = findOptimalFold(sequence);
 
-  if (yourFoldBoard) renderFold(yourFoldBoard, path, SEQUENCE);
-  if (yourEnergy) yourEnergy.textContent = `Energy: ${computeEnergy(path, SEQUENCE)}`;
-  if (optimalFoldBoard) renderFold(optimalFoldBoard, optimal.path, SEQUENCE);
+  if (yourFoldBoard) renderFold(yourFoldBoard, path, sequence);
+  if (yourEnergy) yourEnergy.textContent = `Energy: ${computeEnergy(path, sequence)}`;
+  if (optimalFoldBoard) renderFold(optimalFoldBoard, optimal.path, sequence);
   if (optimalEnergy) optimalEnergy.textContent = `Energy: ${optimal.energy}`;
 
   if (comparison) comparison.hidden = false;
@@ -85,6 +107,18 @@ for (const [dir, button] of directionButtons) {
 undoButton?.addEventListener("click", undo);
 resetButton?.addEventListener("click", reset);
 revealButton?.addEventListener("click", revealOptimal);
+
+if (lengthSlider) {
+  lengthSlider.min = String(MIN_LENGTH);
+  lengthSlider.max = String(MAX_LENGTH);
+  lengthSlider.value = String(DEFAULT_LENGTH);
+}
+lengthSlider?.addEventListener("input", () => {
+  if (lengthReadout) lengthReadout.textContent = lengthSlider.value;
+});
+lengthSlider?.addEventListener("change", () => {
+  regenerate(Number(lengthSlider.value));
+});
 
 const KEY_DIRECTIONS: Record<string, Direction> = {
   arrowup: "up",
