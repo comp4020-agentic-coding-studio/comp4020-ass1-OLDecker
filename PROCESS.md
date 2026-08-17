@@ -21,30 +21,30 @@ it --- has something concrete to click against.
 1. **A half-finished feature had left the build broken.** `hp-model.ts` had
    already been rewritten to generate a random sequence at a chosen length
    instead of a fixed one, but `main.ts` still imported the removed export in
-   six places, so `pnpm check` failed at typecheck before it even reached the
-   build. Rather than revert the model change, I read `hp-model.ts`'s own
-   comments (the length ceiling is picked from benchmarking how long the
-   exhaustive optimal-fold search stays fast) and finished the feature it was
-   clearly building towards: wired a range input in `index.html` to
-   regenerate the sequence and reset the board on change. I knew it was right
-   when `pnpm check` went from a typecheck failure to fully green --- 26
-   passing tests, clean build, clean lint
+   six places, so `pnpm check` failed at typecheck before the build ever ran.
+   Rather than revert the model change, I read `hp-model.ts`'s own comments
+   (the length ceiling is picked from benchmarking how long the exhaustive
+   optimal-fold search stays fast) and finished the feature it was clearly
+   building towards: wired a range input in `index.html` to regenerate the
+   sequence and reset the board on change. I knew it was right when
+   `pnpm check` went from a typecheck failure to fully green: 26 passing
+   tests, clean build, clean lint
    ([`74f35e0`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-OLDecker/commit/74f35e0)).
 
-2. **A cascade bug that no test caught, because it's a visibility bug.** The
-   "your fold vs. optimal fold" comparison panels have a `hidden` attribute in
-   the markup, but they were rendering on page load anyway. `pnpm check` was
-   green the whole time --- the interaction spec only asserts the elements
-   exist, not what they look like. I only found this by actually opening the
-   rendered page and taking a full-page screenshot, which is the harness's own
+2. **A visibility bug that no test caught.** The "your fold vs. optimal fold"
+   comparison panels have a `hidden` attribute in the markup, but they were
+   rendering on page load anyway --- and `pnpm check` stayed green the whole
+   time, because the interaction spec only asserts that the elements exist,
+   not what they look like. I only found this by actually opening the
+   rendered page and taking a full-page screenshot, per the harness's own
    standing instruction ("the rendered page is the truth; your mental model of
    it isn't"). The cause was `.comparison { display: flex; }` beating the UA
    `[hidden]` default on a specificity tie. I added the explicit override and
    confirmed it with a second screenshot showing the panels correctly hidden
    until "Reveal the optimal fold" is clicked. Since no automated check in
    this repo would have caught a regression here, I wrote the failure mode
-   into `CLAUDE.md` as a rule for any future `hidden`-toggled element, instead
-   of just fixing this one instance
+   into `CLAUDE.md` as a rule for any future `hidden`-toggled element, rather
+   than just fixing this one instance
    ([`b199bff`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-OLDecker/commit/b199bff)).
 
 3. **Splitting one working tree into commits that each stand on their own.**
