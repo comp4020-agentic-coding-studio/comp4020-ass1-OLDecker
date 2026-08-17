@@ -23,6 +23,11 @@ header {
   padding: 1.25rem 2rem;
 }
 
+header nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
 header nav a {
   color: #fff;
   font-weight: 600;
@@ -217,14 +222,11 @@ header nav a:hover {
   font-style: italic;
 }
 
-.theory {
+.learn-more {
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e5e7eb;
-}
-
-.theory h2 {
-  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 @media (width <= 480px) {

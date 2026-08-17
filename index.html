@@ -10,7 +10,8 @@
   <body>
     <header>
       <nav aria-label="Primary">
-        <a href="./">Home</a>
+        <a href="./" aria-current="page">Home</a>
+        <a href="./model.html">The model</a>
       </nav>
     </header>
     <main>
@@ -132,44 +133,9 @@
         </p>
       </section>
 
-      <section class="theory" aria-label="More about the model">
-        <h2>The model behind the toy</h2>
-        <p>
-          This page's toy chain is a tiny version of the <strong>HP
-          model</strong>, a lattice protein model biophysicists actually use
-          to study folding. It keeps only one property of each amino acid —
-          hydrophobic (H) or polar (P) — and confines the chain to a grid,
-          one residue per cell, never doubling back on itself. Stripping away
-          everything else about real chemistry is the point: it leaves a
-          version of the folding problem small enough to search completely,
-          while keeping the one force that matters most for how proteins
-          collapse into shape.
-        </p>
-        <p>
-          The energy score is a count: for every pair of H residues that end
-          up next to each other on the grid without being next to each other
-          in the chain, the score drops by one. That's the model's stand-in
-          for buried hydrophobic surface — the more H residues shield each
-          other from the (implied) surrounding water, the lower the energy,
-          and the closer the fold is to the one water would actually settle
-          into. "Reveal the optimal fold" doesn't take a shortcut to find
-          that minimum; it tries every possible fold and keeps the best,
-          which is also why the length slider above tops out at 22 — beyond
-          that, the number of folds to check grows too fast to search in real
-          time.
-        </p>
-        <p>
-          Even at this toy scale, that search is already the hard part of the
-          real protein-folding problem: for a real chain, hundreds of
-          residues long, twenty amino acid types, folding in three dimensions
-          rather than two, finding the true minimum by brute force is
-          completely out of reach. Cells don't solve it that way either —
-          chaperone proteins guide the process — but the underlying principle
-          carries over intact from this 2D toy to the structure pictured
-          above: a sequence determines a shape, and water finding the
-          lowest-energy arrangement of hydrophobic residues is most of why.
-        </p>
-      </section>
+      <p class="learn-more">
+        <a href="./model.html">Read more about the HP model behind this toy →</a>
+      </p>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>
