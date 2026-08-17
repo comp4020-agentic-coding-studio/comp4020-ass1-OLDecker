@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  padding: 2rem;
   font-family: system-ui, sans-serif;
   line-height: 1.6;
   color: #1a1a1a;
@@ -10,10 +9,36 @@ body {
 main {
   max-width: 40rem;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 a {
   color: #0b5fff;
+}
+
+header {
+  background:
+    linear-gradient(rgb(8 12 24 / 70%), rgb(8 12 24 / 70%)),
+    url("./res/AF-Q13188-F1.png") center / cover no-repeat;
+  padding: 1.25rem 2rem;
+}
+
+header nav a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+.attribution {
+  max-width: 40rem;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+  color: #6b7280;
+  font-size: 0.8rem;
 }
 
 .legend {
@@ -167,8 +192,16 @@ a {
 }
 
 @media (width <= 480px) {
-  body {
+  main {
     padding: 1rem;
+  }
+
+  header {
+    padding: 1rem;
+  }
+
+  .attribution {
+    padding: 0 1rem;
   }
 
   .fold-board {
